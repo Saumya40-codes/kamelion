@@ -5,7 +5,7 @@ use kamelion::{Pipeline, config::Config, olap::HudiSource, publisher::KafkaPubli
 async fn main() -> Result<()> {
     let config = Config::from_env()?;
     let source = HudiSource::new(config.hudi);
-    let publisher = KafkaPublisher::new(config.kafka);
+    let publisher = KafkaPublisher::new(config.kafka)?;
 
     Pipeline::new(source, publisher).run_once().await
 }

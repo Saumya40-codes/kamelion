@@ -1,17 +1,26 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use async_trait::async_trait;
+use rdkafka::{ClientConfig, config, producer::FutureProducer};
 
 use super::ChangePublisher;
 use crate::{config::KafkaConfig, event::ChangeEvent};
 
 pub struct KafkaPublisher {
-    #[allow(dead_code)]
-    config: KafkaConfig,
+    producer: FutureProducer,
+    topic: String,
 }
 
 impl KafkaPublisher {
-    pub fn new(config: KafkaConfig) -> Self {
-        Self { config }
+    pub fn new(config: KafkaConfig) -> Result<Self> {
+        let producer = ClientConfig::new()
+            .set("bootstrap.servers", &config.brokers)
+            .create()
+            .context("failed to create kafka producer")?;
+
+        Ok(Self {
+            producer,
+            topic: config.topic,
+        })
     }
 }
 
