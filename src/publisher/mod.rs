@@ -1,13 +1,13 @@
 mod kafka;
 
+use std::future::Future;
+
 use anyhow::Result;
-use async_trait::async_trait;
 
 use crate::event::ChangeEvent;
 
 pub use kafka::KafkaPublisher;
 
-#[async_trait]
 pub trait ChangePublisher {
-    async fn publish(&self, event: &ChangeEvent) -> Result<()>;
+    fn publish(&self, event: &ChangeEvent) -> impl Future<Output = Result<()>> + Send;
 }
