@@ -1,6 +1,5 @@
 use anyhow::{Context, Result};
-use async_trait::async_trait;
-use rdkafka::{ClientConfig, config, producer::FutureProducer};
+use rdkafka::{ClientConfig, producer::FutureProducer};
 
 use super::ChangePublisher;
 use crate::{config::KafkaConfig, event::ChangeEvent};
@@ -24,7 +23,6 @@ impl KafkaPublisher {
     }
 }
 
-#[async_trait]
 impl ChangePublisher for KafkaPublisher {
     async fn publish(&self, _event: &ChangeEvent) -> Result<()> {
         // TODO: serialize the envelope and publish it with a Kafka client.

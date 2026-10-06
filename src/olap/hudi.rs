@@ -1,5 +1,4 @@
 use anyhow::Result;
-use async_trait::async_trait;
 
 use super::ChangeSource;
 use crate::{config::HudiConfig, event::ChangeEvent};
@@ -15,7 +14,6 @@ impl HudiSource {
     }
 }
 
-#[async_trait]
 impl ChangeSource for HudiSource {
     async fn poll(&mut self) -> Result<Vec<ChangeEvent>> {
         // TODO: read the Hudi timeline incrementally from the last checkpoint.
