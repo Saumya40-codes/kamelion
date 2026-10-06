@@ -40,7 +40,6 @@ impl ChangePublisher for KafkaPublisher {
             .key(message.key.as_slice())
             .payload(message.payload.as_slice());
 
-        // This timeout bounds queue admission; delivery.timeout.ms bounds delivery.
         self.producer
             .send(record, Duration::from_secs(5))
             .await
@@ -56,8 +55,6 @@ struct EncodedEvent {
     payload: Vec<u8>,
 }
 
-/// Namespace record keys so different tables can share a Kafka topic.
-/// Position is excluded: all changes to the same record use the same key.
 #[derive(Serialize)]
 struct RecordKey<'a> {
     source: &'a str,
